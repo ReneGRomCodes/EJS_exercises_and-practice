@@ -102,6 +102,62 @@ undefined when there is no such element.
 If you haven’t already, also write a recursive version of nth.
  */
 
+// Converts an array to a list.
+const arrayToList = function(array) {
+    let list = null;
+
+    // build the list from the end to the start.
+    for (let i = array.length - 1; i >= 0; i--) {
+        list = {
+            value: array[i],
+            rest: list
+        };
+    }
+
+    return list;
+}
+
+// Converts a list back to an array.
+const listToArray = function(list) {
+    let array = [];
+
+    for (let node = list; node !== null; node = node.rest) {
+        array.push(node.value);
+    }
+
+    return array;
+}
+
+// Adds a value to the front of a list.
+const prepend = function(value, list) {
+    return {
+        value: value,
+        rest: list
+    };
+}
+
+// Iterative version of nth.
+const nth = function(list, n) {
+    let node = list;
+    let index = 0;
+
+    while (node !== null) {
+        if (index === n) return node.value;
+        node = node.rest;
+        index++;
+    }
+
+    return undefined;
+}
+
+// Recursive version of nth.
+const nthRecursive = function(list, n) {
+    if (list === null) return undefined;
+    if (n === 0) return list.value;
+
+    return nthRecursive(list.rest, n - 1);
+}
+
 
 /*
 Deep comparison
@@ -114,3 +170,22 @@ you can use the typeof operator. If it produces "object" for both values, you sh
 to take one silly exception into account: because of a historical accident, typeof null also produces "object".
 The Object.keys function will be useful when you need to go over the properties of objects to compare them.
  */
+
+function deepEqual(a, b) {
+    if (a === b) return true;
+    if (a === null || b === null) return false;
+    if (typeof a !== "object" || typeof b !== "object") return false;
+
+    let keysA = Object.keys(a);
+    let keysB = Object.keys(b);
+
+    if (keysA.length !== keysB.length) return false;
+
+    for (let key of keysA) {
+        if (!keysB.includes(key) || !deepEqual(a[key], b[key])) {
+            return false;
+        }
+    }
+
+    return true;
+}
