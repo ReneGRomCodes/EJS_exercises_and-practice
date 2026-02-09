@@ -171,7 +171,7 @@ to take one silly exception into account: because of a historical accident, type
 The Object.keys function will be useful when you need to go over the properties of objects to compare them.
  */
 
-function deepEqual(a, b) {
+const deepEqual = function(a, b) {
     if (a === b) return true;
     if (a === null || b === null) return false;
     if (typeof a !== "object" || typeof b !== "object") return false;
